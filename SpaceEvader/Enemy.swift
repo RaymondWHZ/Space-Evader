@@ -10,8 +10,11 @@ import SpriteKit
 
 class Enemy: SKSpriteNode {
     
-    init(_ imageNamed: String) {
+    var life:Int
+    
+    init(_ imageNamed: String, life:Int) {
         let texture = SKTexture(imageNamed: "\(imageNamed)")
+        self.life=life
         super.init(texture: texture, color: UIColor(), size: texture.size())
     }
     
