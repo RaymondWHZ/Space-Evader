@@ -24,10 +24,10 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ao4-uk-Plh">
                                 <rect key="frame" x="278" y="107" width="180" height="200"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="R" translatesAutoresizingMaskIntoConstraints="NO" id="lQE-8F-3t5">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="R" translatesAutoresizingMaskIntoConstraints="NO" id="lQE-8F-3t5">
                                         <rect key="frame" x="0.0" y="0.0" width="180" height="160.33333333333331"/>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Raywork" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qzn-RF-HqY">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Raywork" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qzn-RF-HqY">
                                         <rect key="frame" x="0.0" y="160.33333333333331" width="180" height="39.666666666666686"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="33"/>
                                         <nil key="textColor"/>
