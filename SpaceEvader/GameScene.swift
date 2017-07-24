@@ -243,7 +243,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             level = 1
             levelLabel.text = "Level: 1"
-            levelLimit = 5
+            levelLimit = 8
             meteorScore = 0
             scoreLabel.text = "0"
             
