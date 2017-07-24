@@ -51,11 +51,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addStar()
         run(SKAction.repeatForever(SKAction.sequence([SKAction.run(addStar), SKAction.wait(forDuration: 0.3)])))
         
-        let xCoord = size.width * 0.2
-        let yCoord = size.height * 0.5
-        
         hero.size = CGSize(width: 50, height: 50)
-        hero.position = CGPoint(x: xCoord, y: yCoord)
+        hero.position = CGPoint(x: size.width * 0.2, y: size.height * 0.5)
         
         //setup physical body of the hero
         hero.physicsBody = SKPhysicsBody(rectangleOf: hero.size)
@@ -65,15 +62,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hero.physicsBody?.collisionBitMask = 0
         
         addChild(hero)
-        
-        //Gesture Recognizers
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(swipedUp))
-        swipeUp.direction = .up
-        view.addGestureRecognizer(swipeUp)
-        
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipedDown))
-        swipeDown.direction = .down
-        view.addGestureRecognizer(swipeDown)
         
         //it's in space!!!
         physicsWorld.gravity = CGVector(dx:0,dy:0)
@@ -206,15 +194,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
        return CGFloat(Float(arc4random()) / Float(UINT32_MAX))
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-    }
+    var touchLocation:CGPoint? = nil
+    var isMoving = false
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let touchLocation = touch.location(in: self)
-        
-        if self.died{
+        if died{
             
             let maxX = touchLocation.x<restartLabel.position.x+80
             let minX = touchLocation.x>restartLabel.position.x-80
@@ -228,15 +214,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //restart
             removeAllChildren()
             
-            level=1
+            level = 1
             levelLabel.text = "Level: 1"
-            levelLimit=5
-            meteorScore=0
+            levelLimit = 5
+            meteorScore = 0
             scoreLabel.text = "0"
             
-            hero.position = CGPoint(x: size.width * 0.1, y: size.height * 0.5)
-            
             addChild(hero)
+            
+            hero.position = CGPoint(x: size.width * 0.2, y: size.height * 0.5)
             
             addChild(scoreLabel)
             addChild(levelLabel)
@@ -244,9 +230,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             checkLevelIncrease()
             
             removeAction(forKey: "Rocks")
-            
+            self.touchLocation = nil
+            isMoving = false
+        }
+        else{
+            self.touchLocation = touchLocation
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if touchLocation==nil{
             return
         }
+
+        guard let touch = touches.first else { return }
+        let touchLocation = touch.location(in: self)
+        var yChange = touchLocation.y - (self.touchLocation?.y)!
+        if isMoving || yChange >= 20 || yChange <= -20{
+            if hero.position.y + yChange > size.height - hero.size.height/2{
+                yChange = size.height - hero.size.height/2 - hero.position.y
+            }
+            else if hero.position.y + yChange < hero.size.height/2{
+                yChange = hero.size.height/2 - hero.position.y
+            }
+            hero.run(SKAction.move(to: CGPoint(x: hero.position.x, y: hero.position.y + yChange), duration: 0))
+            self.touchLocation = touchLocation
+            isMoving=true
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if isMoving{
+            isMoving=false
+            return
+        }
+        
+        guard let touch = touches.first else { return }
+        let touchLocation = touch.location(in: self)
         
         //shoot
         let bullet = SKSpriteNode()
@@ -270,35 +290,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         actionMove = SKAction.sequence([SKAction.repeat(SKAction.move(by: vector, duration: TimeInterval(distance/500)), count:10), SKAction.removeFromParent()])
         bullet.run(actionMove)
     }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-    }
-    
-    //moving part{
-
-    func swipedUp(sender:UISwipeGestureRecognizer){
-        var actionMove: SKAction
-        if hero.position.y + heroSpeed >= size.height - hero.size.height/2{
-            actionMove = SKAction.move(to: CGPoint(x: hero.position.x, y: size.height - hero.size.height/2), duration: 0.5)
-        }
-        else{
-            actionMove = SKAction.move(to: CGPoint(x: hero.position.x, y: hero.position.y + heroSpeed), duration: 0.5)
-        }
-        hero.run(actionMove)
-    }
-    
-    func swipedDown(sender:UISwipeGestureRecognizer){
-        var actionMove: SKAction
-        if hero.position.y - heroSpeed <= hero.size.height/2{
-            actionMove = SKAction.move(to: CGPoint(x: hero.position.x, y: hero.size.height/2), duration: 0.5)
-        }else{
-            actionMove = SKAction.move(to: CGPoint(x: hero.position.x, y: hero.position.y - heroSpeed), duration: 0.5)
-        }
-        hero.run(actionMove)
-    }
-    
-    //}
     
     //collision handler{
     
