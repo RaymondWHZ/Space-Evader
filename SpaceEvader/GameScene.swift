@@ -26,7 +26,6 @@ struct Level{
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let hero = SKSpriteNode(imageNamed: "Spaceship")
-    let heroSpeed: CGFloat = 100.0
     
     var meteorScore = 0
     var scoreLabel = SKLabelNode(fontNamed: "Arial")
@@ -35,8 +34,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var level = 1
     var levelLabel = SKLabelNode(fontNamed: "Arial")
-    var levelLimit = 5
-    var levelIncrease = 5
+    var levelLimit = 8
+    var levelIncrease = 8
     
     let gameOverLabel = SKLabelNode(fontNamed: "Arial")
     let restartLabel = SKLabelNode(fontNamed: "Arial")
@@ -282,7 +281,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let distance = sqrt(vector.dx * vector.dx + vector.dy * vector.dy)
         
         var actionMove: SKAction
-        actionMove = SKAction.sequence([SKAction.repeat(SKAction.move(by: vector, duration: TimeInterval(distance/500)), count:10), SKAction.removeFromParent()])
+        actionMove = SKAction.sequence([SKAction.repeat(SKAction.move(by: vector, duration: TimeInterval(distance/500)), count:1000/Int(distance)), SKAction.removeFromParent()])
         bullet.run(actionMove)
     }
     
